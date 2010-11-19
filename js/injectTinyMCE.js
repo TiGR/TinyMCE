@@ -1,5 +1,5 @@
 $().ready(function() {
-    $("#Form_Comment #Form_Body").livequery(function() {
+    $("#Form_Comment #Form_Body, #DiscussionForm #Form_Body").livequery(function() {
         var CommentForm = $(this).parents("div.CommentForm");
         u = gdn.definition('tinymcePath');
         tinymce.PluginManager.urls['inlinepopups'] = u.substring(0, u.lastIndexOf('/')) +
