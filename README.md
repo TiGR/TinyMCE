@@ -7,7 +7,8 @@ About
 This plugin adds visual (WYSIWYG) editor to discussions pages.
 
 It takes care of localization, extra spaces that appear since Vanilla converts 
-all newlines to <br />, Minify-freindly, 
+all newlines to <br />, fixes preview bug, works with auto-save, works well with 
+other plugins that interfere with comment/discussion form.
 
 Installation
 ------------
@@ -23,15 +24,15 @@ Known Issues
 ------------
 
 - No configuration.
-- Limited set of plugins.
-- Possible RTL problems.
+- Limited set of plugins. Let me know if you need more.
 - Preview shows back original element.
+- Inline popups broken.
 
 To do
 -----
 
 - Add configuration, at least ability to select TinyMCE plugins.
-- Add more languages.
+- Add more languages to TinyMCE.
 - Trim down tinymce size, if possible.
 
 Changes
@@ -52,5 +53,6 @@ This code is licensed under GPL free license.
 Contacts
 --------
 
-Igor Tarasov
-<tarasov.igor@gmail.com> (email/gtalk/jabber)
+Igor Tarasov  
+<tarasov.igor@gmail.com> (email/gtalk/jabber)  
+GitHub: http://github.com/TiGR/TinyMCE/
