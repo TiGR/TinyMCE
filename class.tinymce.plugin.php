@@ -18,19 +18,19 @@ class VanillaTinymce extends Gdn_Plugin {
     protected $plugins = array(
         'inlinepopups'  => 1,
         'contextmenu'   => 1,
-        'noneditable'   => 1,
+        'noneditable'   => 0,
         'autoresize'    => 1
     );
-	
-	// Inject TinyMCE
+
+    // Inject TinyMCE
     public function DiscussionController_Render_Before(&$Sender) {
         $this->_injectTinyMCE($Sender); 
     }
-    
+
     public function PostController_Render_Before(&$Sender) {
         $this->_injectTinyMCE($Sender);
     }
-    
+
     // Clean extra newlines
     public function CommentModel_BeforeSaveComment_Handler(&$Sender) {
         $this->_cleanPostedData($Sender->EventArguments['FormPostValues']['Body']);
@@ -39,11 +39,11 @@ class VanillaTinymce extends Gdn_Plugin {
     public function DiscussionModel_BeforeSaveDiscussion_Handler(&$Sender) {
         $this->_cleanPostedData($Sender->EventArguments['FormPostValues']['Body']);
     }
-    
+
     public function Setup(){}
-    
+
     protected function _injectTinyMCE(&$Sender) {
-        $suffix = Gdn::PluginManager()->CheckPlugin('Minify') ? "_src" : "";
+        $suffix = !Gdn::PluginManager()->CheckPlugin('Minify') ? "_src" : "";
         $enabledPlugins = array();
         $lang = Gdn::Locale()->Current() 
             ? substr(Gdn::Locale()->Current(), 0, 2)
@@ -53,17 +53,20 @@ class VanillaTinymce extends Gdn_Plugin {
         $Sender->AddJSFile("plugins/TinyMCE/js/themes/advanced/editor_template$suffix.js");
         $Sender->AddJSFile("plugins/TinyMCE/js/themes/advanced/langs/$lang.js");
         foreach ($this->plugins as $plugin => $enabled) {
-            $Sender->AddJSFile("plugins/TinyMCE/js/plugins/$plugin/editor_plugin$suffix.js");
-            $enabledPlugins[] = $plugin;
+            if ($enabled) {
+                $Sender->AddJSFile("plugins/TinyMCE/js/plugins/$plugin/editor_plugin$suffix.js");
+                $enabledPlugins[] = "-" . $plugin;
+            }
         }
+        $Sender->AddJSFile("plugins/TinyMCE/js/jquery.tinymce.js");
         $Sender->AddJSFile("plugins/TinyMCE/js/injectTinyMCE.js");
-        
+
         // add some options for initalization script
-        $Sender->AddDefinition('tinymcePath', $this->GetWebResource('plugins/TinyMCE/js/tiny_mce_jquery.js'));
+        $Sender->AddDefinition('tinymcePath', $this->GetWebResource('js/tiny_mce_jquery.js'));
         $Sender->AddDefinition('tinymcePlugins', implode(',', $enabledPlugins));
         $Sender->AddDefinition('tinymceLang', $lang);
         $Sender->AddDefinition('tinymceButtons1', "bold,italic,underline,strikethrough,|,link,unlink,image,|,undo,redo,|,justifyleft,justifycenter,justifyright,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,removeformat");
-	}
+    }
 
     /**
      * Removes newlines after such blocks as <p>, <blockquote>, <ol>, etc.
@@ -86,5 +89,4 @@ class VanillaTinymce extends Gdn_Plugin {
             $body = substr($body, 0, -4);
         }
     }
-    
 }
