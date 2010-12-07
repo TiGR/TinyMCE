@@ -17,6 +17,7 @@ $().ready(function() {
             theme_advanced_toolbar_align:       "left",
             theme_advanced_statusbar_location:  "none",
             theme_advanced_resizing:            false,
+            inlinepopups_skin:                  "smskin1",
 
             /*  As Vanilla preferes newlines to format the output, let's do
                 everything to make formatting consistent */
