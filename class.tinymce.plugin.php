@@ -48,6 +48,7 @@ class VanillaTinymce extends Gdn_Plugin {
         $lang = Gdn::Locale()->Current() 
             ? substr(Gdn::Locale()->Current(), 0, 2)
             : "en";
+        $Sender->AddJSFile("plugins/TinyMCE/js/injectTinyMCE.js");
         $Sender->AddJSFile("plugins/TinyMCE/js/tiny_mce_jquery$suffix.js");
         $Sender->AddJSFile("plugins/TinyMCE/js/langs/$lang.js");
         $Sender->AddJSFile("plugins/TinyMCE/js/themes/advanced/editor_template$suffix.js");
@@ -59,10 +60,9 @@ class VanillaTinymce extends Gdn_Plugin {
             }
         }
         $Sender->AddJSFile("plugins/TinyMCE/js/jquery.tinymce.js");
-        $Sender->AddJSFile("plugins/TinyMCE/js/injectTinyMCE.js");
 
         // add some options for initalization script
-        $Sender->AddDefinition('tinymcePath', $this->GetWebResource('js/tiny_mce_jquery.js'));
+        $Sender->AddDefinition('tinymcePath', $this->GetWebResource("js/tiny_mce_jquery$suffix.js"));
         $Sender->AddDefinition('tinymcePlugins', implode(',', $enabledPlugins));
         $Sender->AddDefinition('tinymceLang', $lang);
         $Sender->AddDefinition('tinymceButtons1', "bold,italic,underline,strikethrough,|,link,unlink,image,|,undo,redo,|,justifyleft,justifycenter,justifyright,|,bullist,numlist,|,outdent,indent,blockquote,|,sub,sup,|,removeformat");

@@ -1,9 +1,38 @@
+/* These lines fix some issues that arise when minify is enabled.
+   tinyMCE determines it's URL for plugins and themes from script element,
+   but when minify is enabled, tinyMCE can't find proper script element.
+   So, we help it it a bit.
+   That's why this script has to be executed BEFORE loading tinymce, since
+   it would too late then to fix stuff.
+   Why not using gdn.definition or gdn.url? Because definitions are not
+   available at the moment when these lines get executed. Defenitions get
+   loaded AFTER TinyMCE. */
+(function () {
+    var scripts = document.getElementsByTagName('script');
+    for (i in scripts) {
+        if (!scripts[i].src)
+            continue;
+        u = scripts[i].src;
+        origin = document.location.protocol + "//" + document.location.host;
+        if (u && (u.indexOf(origin) === 0)) {
+            uri = u.substring(origin, u.lastIndexOf('/'));
+            if (uri.search('/plugins/') != -1) {
+                u = uri.substring(0, uri.search('/plugins/') + 9) + 'TinyMCE/js';
+                window.tinyMCEPreInit = {
+                    base: u,
+                    suffix: "",
+                    query: ""
+                }
+                break;
+            }        
+        }
+    }
+})();
+
 $().ready(function() {
     $("#Form_Comment #Form_Body, #DiscussionForm #Form_Body").livequery(function() {
         var CommentForm = $(this).parents("div.CommentForm");
-        u = gdn.definition('tinymcePath');
-        tinymce.PluginManager.urls['inlinepopups'] = u.substring(0, u.lastIndexOf('/')) +
-            '/plugins/inlinepopups/';
+        tinymce.PluginManager.urls['inlinepopups'] = tinymce.baseURL + '/plugins/inlinepopups/';
         editor = jQuery(this).tinymce({
             script_url: gdn.definition('tinymcePath'),
             plugins:    gdn.definition('tinymcePlugins'),
@@ -30,7 +59,7 @@ $().ready(function() {
                 bold:          { inline: 'b'                },
                 italic:        { inline: 'i'                },
                 underline:     { inline: 'u',   exact:true  },
-                strikethrough: { inline: 'del', exact: true },
+                strikethrough: { inline: 'del', exact: true }
             },
 
             // Enable auto-save
