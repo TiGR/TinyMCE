@@ -25,8 +25,6 @@ Known Issues
 
 - No configuration.
 - Limited set of plugins. Let me know if you need more.
-- Preview shows back original element.
-- Inline popups broken.
 
 To do
 -----
@@ -37,6 +35,11 @@ To do
 
 Changes
 -------
+
+### 0.2 [2011-03-06]
+
+- Fix inline popups.
+- Fix original field popup sometimes.
 
 ### 0.1 [2010-11-13]
 
